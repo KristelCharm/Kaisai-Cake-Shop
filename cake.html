@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Kaisai Cake Shop</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+--ink:#684b48;
+--rose:#a96f7b;
+--rose-dark:#87545f;
+--cream:#fffaf4;
+--line:#ead6cc;
+--sage:#8da982;
+}
+
+body{
+margin:0;
+min-height:100vh;
+padding:14px 22px 24px;
+color:var(--ink);
+font-family:'Trebuchet MS',Arial,sans-serif;
+background:
+radial-gradient(circle at 8% 15%,rgba(255,190,205,.78),transparent 25%),
+radial-gradient(circle at 92% 12%,rgba(190,185,245,.72),transparent 27%),
+radial-gradient(circle at 82% 82%,rgba(255,211,151,.68),transparent 26%),
+radial-gradient(circle at 16% 88%,rgba(177,222,198,.72),transparent 25%),
+linear-gradient(135deg,#fff0f5,#f4efff 48%,#fff4df);
+background-attachment:fixed;
+}
+
+body:before{
+content:"✿   ✧   ♡   ✦   ✿";
+position:fixed;
+inset:0;
+height:100vh;
+padding:24px;
+color:rgba(173,119,143,.13);
+font-size:26px;
+letter-spacing:34px;
+line-height:145px;
+overflow:hidden;
+pointer-events:none;
+z-index:-1;
+}
+
+.page{max-width:1480px;width:100%;margin:auto}
+header{text-align:center;margin-bottom:12px}
+
+h1{
+font-family:Georgia,serif;
+font-size:clamp(2rem,5vw,3.5rem);
+color:var(--rose-dark);
+margin:0;
+text-shadow:0 3px 0 white;
+}
+
+.subtitle{
+color:#987c78;
+font-size:.78rem;
+font-weight:700;
+letter-spacing:2px;
+margin-top:8px;
+}
+
+.stats{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+margin:12px 0;
+}
+
+.stat{
+background:#fffaf4;
+border:2px solid var(--line);
+border-radius:22px;
+padding:10px 18px;
+font-weight:700;
+box-shadow:0 5px 12px #65483e12;
+}
+
+.stat strong{color:var(--rose-dark);font-size:1.2rem}
+
+.sound{
+border:1px solid var(--line);
+background:#fffaf4;
+border-radius:50%;
+width:52px;
+height:52px;
+font-size:1.25rem;
+cursor:pointer;
+color:var(--rose-dark);
+}
+
+.layout{
+display:grid;
+grid-template-columns:minmax(0,1fr) minmax(390px,1.05fr);
+gap:18px;
+align-items:start;
+}
+
+.panel{
+background:rgba(255,251,247,.96);
+border:2px solid var(--line);
+border-radius:25px;
+padding:20px;
+min-width:0;
+box-shadow:0 12px 28px #64433417;
+}
+
+.panel-title{
+text-align:center;
+font-weight:800;
+color:var(--rose-dark);
+font-size:1.15rem;
+margin-bottom:15px;
+}
+
+.section-label{
+font-weight:800;
+color:#8d625d;
+margin:17px 0 9px;
+font-size:1.03rem;
+}
+
+.choices{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:11px;
+}
+
+.choice{
+border:2px solid #dfc6b9;
+background:#fffdf9;
+border-radius:15px;
+padding:15px 8px;
+min-height:96px;
+cursor:pointer;
+font:700 1rem 'Trebuchet MS',sans-serif;
+color:#76574e;
+box-shadow:0 4px 0 #ead8cd;
+transition:.15s;
+}
+
+.choice span{
+display:block;
+font-size:2rem;
+margin-bottom:5px;
+}
+
+.choice:hover:not(:disabled){
+transform:translateY(-2px);
+background:#fbefeb;
+}
+
+.choice.selected{
+background:#f4e0e5;
+border-color:#bd8588;
+color:#87545d;
+}
+
+.choice:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.worktop{
+background:linear-gradient(#fbf1eb,#ead8d0);
+border:3px solid #dfc0b2;
+border-radius:24px;
+padding:22px 12px 18px;
+min-height:480px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:flex-end;
+position:relative;
+overflow:hidden;
+}
+
+.worktop:before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:45px;
+background:repeating-linear-gradient(
+90deg,#fffaf2 0 35px,#ead6ca 35px 70px
+);
+}
+
+.sparkles{
+position:absolute;
+top:65px;
+left:10%;
+font-size:1.8rem;
+animation:float 3s ease-in-out infinite;
+}
+
+.sparkles.two{
+left:auto;
+right:12%;
+animation-delay:1s;
+}
+
+@keyframes float{
+50%{transform:translateY(-8px) rotate(12deg)}
+}
+
+.plate{
+width:min(88%,430px);
+height:32px;
+background:linear-gradient(#fffefa,#e8ddd2);
+border:4px solid #d5c2b4;
+border-radius:50%;
+position:relative;
+z-index:1;
+}
+
+.cake{
+width:min(90%,390px);
+height:300px;
+position:relative;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:flex-end;
+z-index:2;
+filter:drop-shadow(0 8px 5px #80513f22);
+}
+
+.cake.empty{opacity:.3}
+.cake.pop{animation:pop .35s ease}
+
+@keyframes pop{
+50%{transform:translateY(-9px) scale(1.04)}
+}
+
+.cake-layer{
+width:100%;
+position:relative;
+border:2px solid #9b6a59;
+box-shadow:inset 0 5px 7px #fff8,inset 0 -5px 6px #0002;
+}
+
+.sponge{
+height:98px;
+border-radius:20px 20px 8px 8px;
+}
+
+.filling{height:32px}
+
+.icing{
+height:52px;
+border-radius:20px 20px 8px 8px;
+margin-bottom:-2px;
+z-index:2;
+background:linear-gradient(180deg,#ffffff,#f7f2eb);
+border-color:#e8dfd7;
+}
+
+.drip{
+position:absolute;
+top:34px;
+width:24px;
+height:40px;
+border-radius:0 0 12px 12px;
+background:#fff;
+}
+
+.drip.d1{left:55px;height:42px}
+.drip.d2{right:68px;height:29px}
+
+.topping-decor{
+position:absolute;
+top:-22px;
+left:0;
+right:0;
+text-align:center;
+font-size:2rem;
+z-index:4;
+}
+
+.cake-name{
+font-size:1rem;
+font-weight:900;
+color:#8d625d;
+margin-top:10px;
+}
+
+.empty-note{
+position:absolute;
+top:55%;
+font-weight:800;
+color:#9c7182;
+font-size:1.15rem;
+}
+
+.order{
+background:linear-gradient(125deg,#ffe5ee,#fff0d9 48%,#e9e7ff);
+border:2px solid #e5bdcb;
+border-radius:20px;
+padding:18px 20px;
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-bottom:17px;
+box-shadow:inset 0 1px 0 #ffffffb8,0 5px 14px #a66b8315;
+}
+
+.order-label{
+font-weight:800;
+color:#986070;
+font-size:.78rem;
+letter-spacing:1.3px;
+}
+
+.order-text{
+white-space:pre-line;
+font-size:1.15rem;
+line-height:1.4;
+font-weight:800;
+color:#684b58;
+}
+
+.price{
+align-self:flex-start;
+background:#e4efdf;
+color:#526b4b;
+padding:9px 17px;
+border-radius:30px;
+font-size:1.12rem;
+font-weight:800;
+}
+
+.serve,.reset,.start{
+border:0;
+border-radius:30px;
+padding:13px 18px;
+font:800 1rem 'Trebuchet MS',sans-serif;
+cursor:pointer;
+transition:.15s;
+}
+
+.serve{
+background:linear-gradient(#b7c7a5,#8da982);
+color:#344d37;
+box-shadow:0 5px 0 #718c68;
+}
+
+.reset{
+background:#f1dfd1;
+color:#79594c;
+box-shadow:0 5px 0 #d7b9a5;
+}
+
+.start{
+background:linear-gradient(#e8c5c1,#d6a5a3);
+color:#68464a;
+box-shadow:0 5px 0 #b98585;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+button:focus-visible{
+outline:3px solid #b97983;
+outline-offset:3px;
+}
+
+button:active:not(:disabled){
+transform:translateY(4px);
+box-shadow:none;
+}
+
+.side-actions{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:13px;
+margin-top:17px;
+}
+
+.side-actions button{
+width:100%;
+min-height:58px;
+}
+
+.side-actions .serve,
+.side-actions .next{
+grid-column:1/-1;
+}
+
+.side-actions .serve{
+min-height:65px;
+font-size:1.12rem;
+}
+
+.message{
+text-align:center;
+min-height:28px;
+margin:15px 0 4px;
+font-weight:800;
+color:#96616a;
+}
+
+.tip{
+text-align:center;
+font-size:.8rem;
+color:#9a8175;
+margin-top:12px;
+}
+
+.progress-wrap{
+height:9px;
+background:#f0e3e4;
+border-radius:20px;
+overflow:hidden;
+margin:9px 0 14px;
+}
+
+.progress-fill{
+height:100%;
+width:0;
+background:linear-gradient(90deg,#b98591,#d7a7a4);
+transition:width .3s;
+}
+
+.round-note{
+text-align:center;
+color:#92766a;
+font-size:.82rem;
+font-weight:700;
+margin:8px 0;
+}
+
+@media(max-width:850px){
+.layout{grid-template-columns:1fr}
+.worktop{min-height:390px}
+.cake{height:260px}
+}
+
+@media(max-width:430px){
+body{padding:12px}
+h1{font-size:2rem}
+.subtitle{letter-spacing:1px}
+.panel{padding:14px}
+.cake{width:88%;height:230px}
+.worktop{min-height:350px}
+.side-actions{grid-template-columns:1fr}
+.side-actions .serve,
+.side-actions .next{grid-column:auto}
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+<header>
+<h1> Kaisai Cake</h1>
+<div class="subtitle">
+♡ HANDCRAFTED SWEETS • COZY MOMENTS • A LITTLE MAGIC ♡
+</div>
+
+<div class="stats">
+<div class="stat">💰 Earnings: <strong id="money">₱0</strong></div>
+<div class="stat">⏳ Time: <strong id="time">02:00</strong></div>
+<div class="stat">👥 Customers: <strong id="customerCount">0/10</strong></div>
+<div class="stat">🎂 Served: <strong id="served">0</strong></div>
+<button class="sound" id="sound" type="button">🔇</button>
+</div>
+
+<div class="progress-wrap">
+<div class="progress-fill" id="progress"></div>
+</div>
+
+<div class="round-note" id="roundNote">
+Serve 10 customers before the 2-minute timer runs out!
+</div>
+</header>
+
+<main class="layout">
+
+<section class="panel">
+<div class="panel-title">♡ CREATE THE CUSTOMER'S CAKE</div>
+
+<div class="section-label">1. Choose your cake flavor</div>
+
+<div class="choices" id="flavors">
+<button class="choice" data-id="chocolate"><span>🍫</span>Chocolate</button>
+<button class="choice" data-id="vanilla"><span>🍦</span>Vanilla</button>
+<button class="choice" data-id="ube"><span>💜</span>Ube</button>
+<button class="choice" data-id="mango"><span>🥭</span>Mango</button>
+<button class="choice" data-id="redvelvet"><span>❤️</span>Red Velvet</button>
+<button class="choice" data-id="blueberry"><span>🫐</span>Blueberry Cheesecake</button>
+<button class="choice" data-id="yema"><span>🍮</span>Yema</button>
+<button class="choice" data-id="mocha"><span>☕</span>Mocha</button>
+</div>
+
+<div class="section-label">2. Choose your icing</div>
+
+<div class="choices" id="icings">
+<button class="choice" data-id="cream">
+<span>🥛</span>White Cream Icing
+</button>
+<button class="choice" data-id="chocolate">
+<span>🍫</span>Chocolate Icing
+</button>
+</div>
+
+<div class="section-label">3. Add the requested topping</div>
+
+<div class="choices" id="toppings">
+<button class="choice" data-id="nuts"><span>🥜</span>Nuts</button>
+<button class="choice" data-id="cookies"><span>🍪</span>Cookies</button>
+<button class="choice" data-id="lecheflan"><span>🍮</span>Leche Flan</button>
+<button class="choice" data-id="chocolate"><span>🍫</span>Chocolate</button>
+<button class="choice" data-id="strawberry"><span>🍓</span>Strawberry</button>
+<button class="choice" data-id="mango"><span>🥭</span>Mango</button>
+<button class="choice" data-id="berries"><span>🫐</span>Berries</button>
+<button class="choice" data-id="cherry"><span>🍒</span>Cherry</button>
+</div>
+</section>
+
+<aside class="panel">
+<div class="panel-title"> CUTIE CAKE</div>
+
+<div class="worktop">
+<div class="sparkles">✦ ✧</div>
+<div class="sparkles two">✧ ✦</div>
+
+<div class="cake empty" id="cake">
+<div class="empty-note">Choose your cake details!</div>
+</div>
+
+<div class="plate"></div>
+
+<div class="cake-name" id="cakeName">
+Your cake will appear here
+</div>
+</div>
+
+<div class="order">
+<div class="order-label">CUSTOMER'S ORDER</div>
+<div class="order-text" id="order">
+Press START GAME to welcome your first customer!
+</div>
+<div class="price" id="price" hidden>₱0</div>
+</div>
+
+<div class="section-label">♡ CONTROLS</div>
+
+<div class="side-actions">
+<button class="start" id="start">▶ START GAME</button>
+<button class="reset" id="reset">↻ RESET CAKE</button>
+<button class="serve" id="serve" disabled>🍽️ SERVE CAKE</button>
+<button class="start next" id="next" disabled>🐾 CALL NEXT CUSTOMER</button>
+</div>
+</aside>
+
+</main>
+
+<div class="message" id="message" aria-live="polite">
+Welcome to Kaisai Café! Let's make something sweet. 🍰
+</div>
+
+<div class="tip">
+♡ Made with sugar, warm coffee-shop vibes, and lots of love ♡
+</div>
+
+</div>
+
+<script>
+'use strict';
+
+// CAKE FLAVORS
+
+const FLAVORS={
+chocolate:{
+name:'Chocolate',price:250,
+sponge:'linear-gradient(90deg,#563326,#956044,#65402f)',
+filling:'#75452e'
+},
+vanilla:{
+name:'Vanilla',price:300,
+sponge:'linear-gradient(90deg,#d7ae72,#f5d9a6,#d5aa70)',
+filling:'#fff0c9'
+},
+ube:{
+name:'Ube',price:350,
+sponge:'linear-gradient(90deg,#7651a4,#b18bd2,#7952a5)',
+filling:'#a77acb'
+},
+mango:{
+name:'Mango',price:400,
+sponge:'linear-gradient(90deg,#d58a27,#ffd06b,#d58a27)',
+filling:'#ffbf45'
+},
+redvelvet:{
+name:'Red Velvet',price:450,
+sponge:'linear-gradient(90deg,#8f263c,#c85a65,#922b40)',
+filling:'#f3d7d5'
+},
+blueberry:{
+name:'Blueberry Cheesecake',price:550,
+sponge:'linear-gradient(90deg,#62527f,#a99ac5,#6d5a8c)',
+filling:'#d9c8e9'
+},
+yema:{
+name:'Yema',price:650,
+sponge:'linear-gradient(90deg,#c17b27,#f2c36c,#c17b27)',
+filling:'#f3c76d'
+},
+mocha:{
+name:'Mocha',price:750,
+sponge:'linear-gradient(90deg,#493027,#88604b,#55392d)',
+filling:'#a77b60'
+}
+};
+
+// ICING OPTIONS
+
+const ICINGS={
+cream:{
+name:'White Cream Icing',
+color:'#fffdf8'
+},
+chocolate:{
+name:'Chocolate Icing',
+color:'#593321'
+}
+};
+
+// TOPPINGS
+
+const TOPPINGS={
+nuts:{name:'Nuts',decor:'🥜 ✧ 🥜'},
+cookies:{name:'Cookies',decor:'🍪 ✧ 🍪'},
+lecheflan:{name:'Leche Flan',decor:'🍮 ✧ 🍮'},
+chocolate:{name:'Chocolate',decor:'🍫 ✧ 🍫'},
+strawberry:{name:'Strawberry',decor:'🍓 ✧ 🍓'},
+mango:{name:'Mango',decor:'🥭 ✧ 🥭'},
+berries:{name:'Berries',decor:'🫐 🍓 🫐'},
+cherry:{name:'Cherry',decor:'🍒 ✧ 🍒'}
+};
+
+// CUSTOMERS
+
+const PEOPLE=[
+['👩🏻','Mia'],['👨🏽','Leo'],['👧🏻','Lily'],
+['👩🏽','Nina'],['🧑🏻','Alex'],['👵🏻','Lola'],
+['👦🏽','Noah'],['👩🏼','Ella'],['🧑🏾','Kai'],
+['👩🏾','Sofia']
+];
+
+const $=id=>document.getElementById(id);
+const TOTAL=10;
+const ROUND_SECONDS=120;
+
+let money=0;
+let served=0;
+let created=0;
+let active=null;
+let seconds=ROUND_SECONDS;
+let gameStarted=false;
+let gameOver=false;
+let timerId=null;
+
+let soundOn=false;
+let audio=null;
+let musicTimer=null;
+let musicStep=0;
+let ambienceNodes=[];
+
+const random=array=>array[Math.floor(Math.random()*array.length)];
+
+// DISPLAY
+
+function say(message){
+$('message').textContent=message;
+}
+
+function updateStats(){
+$('money').textContent=`₱${money.toLocaleString('en-PH')}`;
+
+$('time').textContent=
+`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;
+
+$('customerCount').textContent=`${created}/${TOTAL}`;
+$('served').textContent=served;
+$('progress').style.width=`${served/TOTAL*100}%`;
+}
+
+function updateOrder(){
+$('order').textContent=active
+?`Flavor: ${FLAVORS[active.flavor].name}\nIcing: ${ICINGS[active.icing].name}\nTopping: ${TOPPINGS[active.topping].name}`
+:(gameOver?'Round complete!':'Waiting for your next customer...');
+
+$('price').hidden=!active;
+
+if(active){
+$('price').textContent=`₱${active.price.toLocaleString('en-PH')}`;
+}
+}
+
+function updateChoices(){
+document.querySelectorAll('.choice').forEach(btn=>{
+const group=btn.parentElement.id;
+
+const selected=active&&(
+group==='flavors'
+?active.selectedFlavor===btn.dataset.id
+:group==='icings'
+?active.selectedIcing===btn.dataset.id
+:active.selectedTopping===btn.dataset.id
+);
+
+btn.classList.toggle('selected',!!selected);
+btn.disabled=!active||gameOver;
+});
+
+$('serve').disabled=!(
+active&&
+active.selectedFlavor&&
+active.selectedIcing&&
+active.selectedTopping&&
+!gameOver
+);
+}
+
+// CAKE DISPLAY
+
+function renderCake(){
+const cake=$('cake');
+cake.innerHTML='';
+
+if(!active||!active.selectedFlavor){
+cake.classList.add('empty');
+
+const note=document.createElement('div');
+note.className='empty-note';
+note.textContent='Choose your cake details!';
+
+cake.append(note);
+$('cakeName').textContent='Your cake will appear here';
+return;
+}
+
+cake.classList.remove('empty');
+
+const flavor=FLAVORS[active.selectedFlavor];
+const icingChoice=active.selectedIcing
+?ICINGS[active.selectedIcing]:null;
+const topping=active.selectedTopping
+?TOPPINGS[active.selectedTopping]:null;
+
+const sponge=document.createElement('div');
+sponge.className='cake-layer sponge';
+sponge.style.background=flavor.sponge;
+
+const filling=document.createElement('div');
+filling.className='cake-layer filling';
+filling.style.background=flavor.filling;
+
+const icing=document.createElement('div');
+icing.className='cake-layer icing';
+icing.style.background=icingChoice?icingChoice.color:'#fffdf8';
+
+const drip1=document.createElement('i');
+drip1.className='drip d1';
+
+const drip2=document.createElement('i');
+drip2.className='drip d2';
+
+const icingColor=icingChoice?icingChoice.color:'#fffdf8';
+drip1.style.background=drip2.style.background=icingColor;
+
+icing.append(drip1,drip2);
+cake.append(icing,filling,sponge);
+
+if(topping){
+const deco=document.createElement('div');
+deco.className='topping-decor';
+deco.textContent=topping.decor;
+cake.append(deco);
+}
+
+$('cakeName').textContent=
+`${flavor.name} cake • ${icingChoice?icingChoice.name:'No icing selected'}`+
+(topping?' • '+topping.name+' topping':'');
+
+cake.classList.remove('pop');
+void cake.offsetWidth;
+cake.classList.add('pop');
+}
+
+// CUSTOMER MANAGEMENT
+
+function setActive(customer){
+active=customer;
+
+if(active){
+active.selectedFlavor=null;
+active.selectedIcing=null;
+active.selectedTopping=null;
+}
+
+updateOrder();
+updateChoices();
+renderCake();
+renderQueue();
+}
+
+function renderQueue(){
+$('next').disabled=
+!gameStarted||gameOver||!!active||created>=TOTAL;
+
+$('next').textContent=
+created>=TOTAL
+?'ALL CUSTOMERS CALLED'
+:'🐾 CALL NEXT CUSTOMER';
+}
+
+// SOUND
+
+function playTone(freq,duration=.16,type='sine',volume=.11){
+if(!soundOn||!audio)return;
+
+const osc=audio.createOscillator();
+const gain=audio.createGain();
+
+osc.type=type;
+osc.frequency.value=freq;
+
+gain.gain.setValueAtTime(volume,audio.currentTime);
+gain.gain.exponentialRampToValueAtTime(
+.001,audio.currentTime+duration
+);
+
+osc.connect(gain);
+gain.connect(audio.destination);
+
+osc.start();
+osc.stop(audio.currentTime+duration);
+}
+
+function startCafeMusic(){
+try{
+audio||=new(window.AudioContext||window.webkitAudioContext)();
+
+if(audio.state==='suspended'){
+audio.resume();
+}
+
+if(musicTimer)return;
+
+const chords=[
+[261.63,329.63,392],
+[220,261.63,329.63],
+[174.61,220,261.63],
+[196,246.94,293.66]
+];
+
+musicStep=0;
+
+musicTimer=setInterval(()=>{
+if(!soundOn)return;
+
+const chord=chords[Math.floor(musicStep/4)%chords.length];
+const note=chord[musicStep%3];
+
+playTone(note,.75,'sine',.13);
+
+if(musicStep%4===0){
+playTone(chord[2]*2,.32,'triangle',.055);
+}
+
+musicStep++;
+},520);
+
+}catch(error){
+console.warn('Audio unavailable:',error);
+}
+}
+
+function stopCafeMusic(){
+if(musicTimer){
+clearInterval(musicTimer);
+musicTimer=null;
+}
+}
+
+// GAME ENDING
+
+function finishGame(reason){
+if(gameOver)return;
+
+gameOver=true;
+
+if(timerId){
+clearInterval(timerId);
+timerId=null;
+}
+
+active=null;
+
+updateStats();
+updateOrder();
+updateChoices();
+renderCake();
+renderQueue();
+
+$('start').textContent='↻ PLAY AGAIN';
+$('start').disabled=false;
+$('next').disabled=true;
+
+say(
+`${reason} You served ${served}/${TOTAL} customers `+
+`and earned ₱${money.toLocaleString('en-PH')}! `+
+`Thanks for visiting Kaisai Café! 💗`
+);
+}
+
+function tick(){
+if(gameOver)return;
+
+seconds=Math.max(0,seconds-1);
+updateStats();
+
+if(seconds<=0){
+finishGame('⏰ Time is up!');
+}
+}
+
+// CUSTOMER ARRIVAL
+
+function callCustomer(){
+if(!gameStarted||gameOver||active)return;
+
+if(created>=TOTAL){
+if(served>=TOTAL){
+finishGame('🎉 cake complete!');
+}
+return;
+}
+
+const [avatar,name]=PEOPLE[created];
+const flavor=random(Object.keys(FLAVORS));
+
+const customer={
+avatar,
+name,
+flavor,
+icing:random(Object.keys(ICINGS)),
+topping:random(Object.keys(TOPPINGS)),
+price:FLAVORS[flavor].price,
+selectedFlavor:null,
+selectedIcing:null,
+selectedTopping:null
+};
+
+created++;
+
+setActive(customer);
+updateStats();
+
+say(
+`${name} arrived! Make a ${FLAVORS[customer.flavor].name} cake `+
+`with ${ICINGS[customer.icing].name} and `+
+`${TOPPINGS[customer.topping].name} topping. 💗`
+);
+}
+
+// START GAME
+
+function startGame(){
+if(timerId){
+clearInterval(timerId);
+timerId=null;
+}
+
+money=0;
+served=0;
+created=0;
+seconds=ROUND_SECONDS;
+
+gameStarted=true;
+gameOver=false;
+active=null;
+
+updateStats();
+setActive(null);
+
+$('start').disabled=true;
+$('start').textContent='☕ GAME IN PROGRESS';
+
+$('roundNote').textContent=
+'Serve 10 customers before the 2-minute timer runs out!';
+
+say('Your café is open! Serve all 10 customers before time runs out. 💗');
+
+timerId=setInterval(tick,1000);
+callCustomer();
+}
+
+// SELECT FLAVOR, ICING AND TOPPING
+
+function choose(kind,id){
+if(!active||gameOver)return;
+
+if(kind==='flavor'){
+active.selectedFlavor=id;
+}else if(kind==='icing'){
+active.selectedIcing=id;
+}else{
+active.selectedTopping=id;
+}
+
+updateChoices();
+renderCake();
+
+playTone(740,.08);
+
+if(active.selectedFlavor&&active.selectedIcing&&active.selectedTopping){
+say('Beautiful! Your cake is ready. Check the order and serve it! ✨');
+}else{
+const messages={
+flavor:'Lovely flavor! Now choose your icing. 🍰',
+icing:'Icing selected! Now choose the topping. 🎀',
+topping:'Cute topping! Check if you selected all cake details. 🍓'
+};
+say(messages[kind]);
+}
+}
+
+// SERVE CAKE
+
+function serve(){
+if(!active||gameOver)return;
+
+if(!active.selectedFlavor||!active.selectedIcing||!active.selectedTopping){
+say('Choose the cake flavor, icing, and topping first!');
+return;
+}
+
+if(
+active.selectedFlavor!==active.flavor||
+active.selectedIcing!==active.icing||
+active.selectedTopping!==active.topping
+){
+say(
+`Not quite! ${active.name} ordered `+
+`${FLAVORS[active.flavor].name}, `+
+`${ICINGS[active.icing].name}, and `+
+`${TOPPINGS[active.topping].name} topping. Try again! 💗`
+);
+
+playTone(250,.2,'triangle');
+return;
+}
+
+const customer=active;
+
+money+=customer.price;
+served++;
+active=null;
+
+updateStats();
+updateOrder();
+updateChoices();
+renderCake();
+renderQueue();
+
+say(
+`🎉 Perfect cake! ${customer.name} loves it! `+
+`+₱${customer.price.toLocaleString('en-PH')}!`
+);
+
+playTone(660,.15);
+setTimeout(()=>playTone(880,.18),120);
+
+if(served>=TOTAL){
+finishGame('🎉 All 10 customers served!');
+return;
+}
+
+if(created>=TOTAL){
+finishGame('🎉 Café round complete!');
+return;
+}
+
+setTimeout(()=>{
+if(!gameOver&&!active&&seconds>0){
+callCustomer();
+}
+},450);
+}
+
+// BUTTON EVENTS
+
+document.querySelectorAll('#flavors .choice').forEach(btn=>{
+btn.addEventListener('click',()=>{
+choose('flavor',btn.dataset.id);
+});
+});
+
+document.querySelectorAll('#icings .choice').forEach(btn=>{
+btn.addEventListener('click',()=>{
+choose('icing',btn.dataset.id);
+});
+});
+
+document.querySelectorAll('#toppings .choice').forEach(btn=>{
+btn.addEventListener('click',()=>{
+choose('topping',btn.dataset.id);
+});
+});
+
+$('serve').addEventListener('click',serve);
+
+$('reset').addEventListener('click',()=>{
+if(!active||gameOver){
+say('There is no cake to reset right now.');
+return;
+}
+
+active.selectedFlavor=null;
+active.selectedIcing=null;
+active.selectedTopping=null;
+
+updateChoices();
+renderCake();
+
+say('Cake cleared! Choose the flavor, icing, and topping again. 🧁');
+});
+
+$('next').addEventListener('click',callCustomer);
+$('start').addEventListener('click',startGame);
+
+$('sound').addEventListener('click',()=>{
+soundOn=!soundOn;
+
+$('sound').textContent=soundOn?'♫':'🔇';
+
+if(soundOn){
+startCafeMusic();
+say('Cozy café music is playing. ☕');
+}else{
+stopCafeMusic();
+say('Café music muted. ♡');
+}
+});
+
+// INITIALIZE
+
+updateStats();
+updateOrder();
+updateChoices();
+renderQueue();
+
+</script>
+</body>
+</html>
